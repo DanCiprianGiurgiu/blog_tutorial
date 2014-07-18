@@ -39,7 +39,7 @@ switch ($PAGE) {
         break;
     default:
         echo "
-        <h1> selecteaza pagina </h1>
+        <h1> Selecteaza pagina </h1>
         <p>  </p>";
         break;
 
