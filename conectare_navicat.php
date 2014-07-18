@@ -1,21 +1,16 @@
 <?php
-
-$link = mysql_connect('dan.com','roort', '');
-if|(!$link){
+$link = mysql_connect('localhost', 'root', '');
+if (!$link) {
     die('Connection failed: ' . mysql_error());
-    $db = mysql_select_db('test');
-    if(!$db){
-        die('selecteaza database  unavailable ' . mysql_error9());
-    }
 }
-$db = mysql_select_db('test');
-if(!$db){
+$db = mysql_select_db('blog_text');
+if (!$db) {
     die('Selected database unavailable: ' . mysql_error());
 }
-$sql = "SELECT artist_name FROM artist";
+$sql = "SELECT artist_name FROM artists";
 $result = mysql_query($sql);
-while($row = mysql_fetch_array($result)) {
-    printf("Artist: %S<br ?>, $row['artist_name]");
+while ($row = mysql_fetch_array($result)) {
+    printf("Artist: %s<br />", $row['artist_name']);
 }
 mysql_free_result($result);
 mysql_close($link);
