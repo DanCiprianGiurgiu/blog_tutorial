@@ -7,9 +7,9 @@
     <title> Simple Blog </title>
 </head>
 <body>
-<h3> Simple Blog Application </h3>
+<h2> Simple Blog Application </h2>
 
-<form method="post" action="simple_blog/inc/update.inc.php">
+<form method="post" action="/simple_blog/inc/update.inc.php">
     <fieldset>
         <legend>New Entry Submission</legend>
         <label>Title

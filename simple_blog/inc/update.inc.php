@@ -18,10 +18,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'
     $id = $id_obj->fetch();
     $id_obj->closeCursor();
 // Send the user to the new entry
-    header('Location: ../admin.php?id='.$id[0]);
+    header('Location: ../?id='.$id[0]);
     exit;
 } else {
-    header('Location: ../admin.php');
+    header('Location: ../');
     exit;
 }
 ?>
