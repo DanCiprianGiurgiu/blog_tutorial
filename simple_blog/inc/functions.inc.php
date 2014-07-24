@@ -1,33 +1,41 @@
 <?php
-function retrieveEntries($db, $id = NULL)
+function retrieveEntries($db, $page, $url = NULL)
 {
-    if (isset($id)) {
-        $sql = "SELECT title, entry
+    if (isset($url)) {
+        $sql = "SELECT id, page, title, entry
 FROM entries
-WHERE id=?
+WHERE url=?
 LIMIT 1";
         $stmt = $db->prepare($sql);
-        $stmt->execute(array($_GET['id']));
-// Save the returned entry array
+        $stmt->execute(array($url));
         $e = $stmt->fetch();
-// Set the fulldisp flag for a single entry
         $fulldisp = 1;
     } else {
-        $sql = "SELECT id, title FROM entries ORDER BY created DESC";
-        foreach ($db->query($sql) as $row) {
-            $e[] = array('id' => $row['id'], 'title' => $row['title']);
-        }
-        $fulldisp = 0;
-
-        if (!is_array($e)) {
-            $fulldisp = 1;
-            $e = array(
-                'title' => 'No Entries Yet',
-                'entry' => '<a href="/admin.php">Post an entry!</a>');
-        }
-
-
+        $sql = "SELECT id, page, title, entry, url FROM entries WHERE page=? ORDER BY created DESC";
+        $stmt = $db->prepare($sql);
+        $stmt->execute(array($page));
+        $e = NULL;
     }
+    while ($row = $stmt->fetch()) {
+        if ($page == 'blog') {
+            $e[] = $row;
+            $fulldisp = 0;
+        }
+        else {
+            $e = $row;
+            $fulldisp = 1;
+            }
+    }
+
+    $fulldisp = 0;
+
+    if (!is_array($e)) {
+        $fulldisp = 1;
+        $e = array(
+            'title' => 'No Entries Yet',
+            'entry' => '<a href="/simple_blog/admin.php">Post an entry!</a>');
+    }
+
     array_push($e, $fulldisp);
     return $e;
 }
@@ -39,4 +47,12 @@ function sanitizeData($data)
     } else {
         return array_map('sanitizeData', $data);
     }
+}
+
+function makeUrl($title)
+{
+    $patterns = array('/\s+/', '/(?!-)\W+/');
+    $replacements = array('-', '');
+    return preg_replace($patterns, $replacements, strtolower($title));
+
 }
