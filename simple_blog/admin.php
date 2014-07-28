@@ -3,8 +3,31 @@ include_once 'inc/functions.inc.php';
 include_once 'inc/db.inc.php';
 $db = new PDO(DB_INFO, DB_USER, DB_PASS);
 $page = isset($_GET['page']) ? htmlentities(strip_tags($_GET['page'])) : 'blog';
+if(isset($_POST['action']) && $_POST['action'] == 'delete')
+{
+    if($_POST['submit'] == 'Yes')
+    {
+        $url = htmlentities(strip_tags($_POST['url']));
+        if(deleteEntry($db, $url))
+        {
+            header("Location: /simple_blog/");
+            exit;
+        }
+        else
+        {
+            exit("Error deleting the entry!");
+        }
+    }
+    else
+    {
+        header("Location: /simple_blog/blog/$url");
+        exit; }
+}
 if (isset($_GET['url'])) {
     $url = htmlentities(strip_tags($_GET['url']));
+    if($page == 'delete') {
+        $confirm = confirmDelete($db, $url);
+    }
     $legend = "Edit This Entry";
     $e = retrieveEntries($db, $page, $url);
     $id = $e['id'];
@@ -29,7 +52,10 @@ if (isset($_GET['url'])) {
 </head>
 <body>
 <h2> Simple Blog Application </h2>
-
+<?php if($page == 'delete'): {
+    echo $confirm;
+}else:
+?>
 <form method="post" action="/simple_blog/inc/update.inc.php">
     <fieldset>
         <legend><?php echo $legend ?></legend>
@@ -49,6 +75,6 @@ if (isset($_GET['url'])) {
         <input type="submit" name="submit" value="Cancel"/>
     </fieldset>
 </form>
+<?php endif; ?>
 </body>
 </html>
-
