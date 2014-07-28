@@ -9,8 +9,8 @@
 <body>
 <h1> Simple Blog Application </h1>
 <ul id="menu">
-    <li><a href="/simple_blog/blog/">Blog</a> </li>
-    <li><a href="/simple_blog/about/">About the Author</a> </li>
+    <li><a href="/simple_blog/blog/">Blog</a></li>
+    <li><a href="/simple_blog/about/">About the Author</a></li>
 </ul>
 
 <div id="entries">
@@ -40,10 +40,15 @@ $e = sanitizeData($e);
 <div id="entries">
     <?php
     if ($fulldisp == 1) {
-        //$url = (isset($url)) ? $url : $e['url'];
+        $url = (isset($url)) ? $url : $e['url'];
+        $admin = adminLinks($page, $url);
         ?>
         <h2><?php echo $e['title'] ?> </h2>
-        <p> <?php echo $e['entry'] ?> </p>
+        <?php echo $e['entry'] ?>
+        <p>
+            <?php echo $admin['edit'] ?>
+            <?php if ($page == 'blog') echo $admin['delete'] ?>
+        </p>
         <?php if ($page == 'blog'): ?>
             <p class="backlink">
                 <a href="./">Back to Latest Entries</a>
@@ -52,10 +57,13 @@ $e = sanitizeData($e);
     <?php
     } else {
         foreach ($e as $entry) {
-            ?> <p><a
-                    href="/simple_blog/<?php echo $entry['page'] ?>/<?php echo $entry['url'] ?>">
-                    <?php echo $entry['title'] ?> </a></p>
-        <?php
+            ?>
+            <p>
+                <a href="/simple_blog/<?php echo $entry['page'] ?>/<?php echo $entry['url'] ?>">
+                    <?php echo $entry['title'] ?>
+                </a>
+            </p>
+            <?php
         }
     }
     ?>

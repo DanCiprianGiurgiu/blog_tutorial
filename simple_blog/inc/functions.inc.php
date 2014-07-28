@@ -1,11 +1,17 @@
 <?php
-function retrieveEntries($db, $page, $url = NULL)
+function adminLinks($page, $url)
+{
+    $editURL = "/simple_blog/admin/$page/$url";
+    $deleteURL = "/simple_blog/admin/delete/$url";
+    $admin['edit'] = "<a href=\"$editURL\">edit</a>";
+    $admin['delete'] = "<a href=\"$deleteURL\">delete</a>";
+    return $admin;
+}
+
+function retrieveEntries($db, $page, $url)
 {
     if (isset($url)) {
-        $sql = "SELECT id, page, title, entry
-FROM entries
-WHERE url=?
-LIMIT 1";
+        $sql = "SELECT id, page, title, entry FROM entries WHERE url=? LIMIT 1";
         $stmt = $db->prepare($sql);
         $stmt->execute(array($url));
         $e = $stmt->fetch();
@@ -20,11 +26,10 @@ LIMIT 1";
         if ($page == 'blog') {
             $e[] = $row;
             $fulldisp = 0;
-        }
-        else {
+        } else {
             $e = $row;
             $fulldisp = 1;
-            }
+        }
     }
 
     $fulldisp = 0;

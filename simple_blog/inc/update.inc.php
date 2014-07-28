@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'
     $id = $id_obj->fetch();
     $id_obj->closeCursor();
 // Send the user to the new entry
-    header('Location: /simple_blog/'.$page.'/ '.$url);
+    header('Location: /simple_blog/' . $page . '/ ' . $url);
     exit;
 } else {
     header('Location: ../');
